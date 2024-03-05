@@ -1,14 +1,13 @@
-name: Prymal Order Log
-run-name: ${{ github.actor }} - Prymal Order Log
+name: Prymal Order Log BACKFILL
+run-name: ${{ github.actor }} - Prymal Order Log BACKFILL
 on: 
   push:
     paths:
-      - '**/pipeline/pipeline.py'
-      - '**/workflows/pipeline_workflow.yml'
-  schedule:
-    - cron: '0 10 * * *'  # Runs at 10 AM every day (UTC)
+      - '**/backfill/backfill.py'
+      - '**/workflows/backfill_workflow.yml'
+
 jobs:
-  pipeline_workflow:
+  backfill_workflow:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo code
@@ -26,12 +25,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
     
-      - name: Generate Order Log
+      - name: Generate Order Log Backfill
         env: 
           AWS_ACCESS_KEY:  ${{ secrets.AWS_ACCESS_KEY }}
           AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
           S3_PRYMAL_ANALYTICS: ${{ secrets.S3_PRYMAL_ANALYTICS }}
-        run: python pipeline/pipeline.py 
+        run: python backfill/backfill.py 
 
 
       - run: echo "Job status - ${{ job.status }}."
