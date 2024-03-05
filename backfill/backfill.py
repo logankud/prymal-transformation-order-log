@@ -263,6 +263,7 @@ logger.info('adding features')
 result_df['product_rev'] = result_df['price'].astype(float) * result_df['quantity'].astype(float)
 
 # Create order month
+result_df['order_date'] = result_df['order_date'].apply(lambda x: x[:11]).copy()
 result_df['month'] = pd.to_datetime(result_df['order_date']).dt.strftime('%Y-%m')
 
 
