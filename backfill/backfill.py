@@ -15,7 +15,7 @@ import io
 import yaml
 
 # Open and read the YAML file
-with open('config.yml', 'r') as file:
+with open('backfill/config.yml', 'r') as file:
     config = yaml.safe_load(file)
 
 backfill_start_date = config['backfill_start_date']
