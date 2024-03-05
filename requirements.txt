@@ -3,4 +3,4 @@ botocore
 pandas
 datetime
 loguru
-yaml
+PyYAML
