@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} - Prymal Order Log BACKFILL
 on: 
   push:
     paths:
-      - '**/backfill/backfill.py'
+      - '**/backfill/'
       - '**/workflows/backfill_workflow.yml'
 
 jobs:
