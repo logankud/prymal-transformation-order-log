@@ -256,6 +256,8 @@ result_df = run_athena_query(query=QUERY, database=DATABASE, region=REGION)
 
 # ADD NEW FEATURES =======================================
 
+logger.info('adding features')
+
 
 # Calculate product revenue for each line item
 result_df['product_rev'] = result_df['price'].astype(float) * result_df['quantity'].astype(float)
@@ -265,6 +267,8 @@ result_df['month'] = pd.to_datetime(result_df['order_date']).dt.strftime('%Y-%m'
 
 
 # AGGREGATE DATA  =======================================
+
+logger.info('agregating to one record per order')
 
 # Consolidate into one record per order
 orders_df = result_df.groupby(['order_id','email'],as_index=False)['order_date'].min()
@@ -279,6 +283,7 @@ orders_df['channel'] = 'Shopify'
 
 # WRITE TO S3 =======================================
 
+logger.info('configuring to write to s3')
 
 # Create s3 client
 s3_client = boto3.client('s3', 
@@ -293,6 +298,8 @@ BUCKET = os.environ['S3_PRYMAL_ANALYTICS']
 current_date = pd.to_datetime(backfill_start_date)
 
 while  pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
+
+    logger.info(current_date)
 
 
     daily_orders = orders_df.loc[orders_df['order_date']==pd.to_datetime(current_date).strftime('%Y-%m-%d')]
@@ -331,3 +338,7 @@ while  pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
             logger.info(f"Successful S3 put_object response for PUT ({S3_PREFIX_PATH}). Status - {status}")
         else:
             logger.error(f"Unsuccessful S3 put_object response for PUT ({S3_PREFIX_PATH}. Status - {status}")
+
+
+    # Increment by 1 day
+    current_date = pd.to_datetime(current_date) + timedelta(1)
