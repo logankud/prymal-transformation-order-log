@@ -341,4 +341,4 @@ while pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
 
 
     # Increment by 1 day
-    current_date = pd.to_datetime(current_date) + timedelta(1)
+    current_date = pd.to_datetime(pd.to_datetime(current_date) + timedelta(1)).strftime('%Y-%m-%d')
