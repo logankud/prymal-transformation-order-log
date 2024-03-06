@@ -297,7 +297,7 @@ BUCKET = os.environ['S3_PRYMAL_ANALYTICS']
 
 current_date = pd.to_datetime(backfill_start_date)
 
-while  pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
+while pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
 
     logger.info(current_date)
 
@@ -324,7 +324,7 @@ while  pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
 
 
     with io.StringIO() as csv_buffer:
-        orders_df.to_csv(csv_buffer, index=False)
+        daily_orders.to_csv(csv_buffer, index=False)
 
         response = s3_client.put_object(
             Bucket=BUCKET, 
