@@ -319,25 +319,25 @@ while pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
         # Delete data 
         delete_s3_prefix_data(bucket=BUCKET, s3_prefix=S3_PREFIX_PATH)
 
+    if len(daily_orders) > 0:
 
-    logger.info(f'Writing to {S3_PREFIX_PATH}')
+        logger.info(f'Writing to {S3_PREFIX_PATH}')
 
+        with io.StringIO() as csv_buffer:
+            daily_orders.to_csv(csv_buffer, index=False)
 
-    with io.StringIO() as csv_buffer:
-        daily_orders.to_csv(csv_buffer, index=False)
+            response = s3_client.put_object(
+                Bucket=BUCKET, 
+                Key=S3_PREFIX_PATH, 
+                Body=csv_buffer.getvalue()
+            )
 
-        response = s3_client.put_object(
-            Bucket=BUCKET, 
-            Key=S3_PREFIX_PATH, 
-            Body=csv_buffer.getvalue()
-        )
+            status = response['ResponseMetadata']['HTTPStatusCode']
 
-        status = response['ResponseMetadata']['HTTPStatusCode']
-
-        if status == 200:
-            logger.info(f"Successful S3 put_object response for PUT ({S3_PREFIX_PATH}). Status - {status}")
-        else:
-            logger.error(f"Unsuccessful S3 put_object response for PUT ({S3_PREFIX_PATH}. Status - {status}")
+            if status == 200:
+                logger.info(f"Successful S3 put_object response for PUT ({S3_PREFIX_PATH}). Status - {status}")
+            else:
+                logger.error(f"Unsuccessful S3 put_object response for PUT ({S3_PREFIX_PATH}. Status - {status}")
 
 
     # Increment by 1 day
