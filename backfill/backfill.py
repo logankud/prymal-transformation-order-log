@@ -374,7 +374,7 @@ s3_client = boto3.client('s3',
 # Set bucket
 BUCKET = os.environ['S3_PRYMAL_ANALYTICS']
 
-current_date = pd.to_datetime(backfill_start_date)
+current_date = pd.to_datetime(backfill_start_date).strftime('%Y-%m-%d')
 
 while pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
 
@@ -408,7 +408,7 @@ while pd.to_datetime(current_date) <= pd.to_datetime(backfill_end_date):
 
         """
 
-        run_athena_query_no_results(query=QUERY, database='prymal')
+        run_athena_query_no_results(query=QUERY, database='prymal-analytics')
 
         logger.info(f'Writing to {S3_PREFIX_PATH}')
 
