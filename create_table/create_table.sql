@@ -1,14 +1,10 @@
-CREATE EXTERNAL TABLE IF NOT EXISTS shopify_cltv_rfm_inference(
+CREATE EXTERNAL TABLE IF NOT EXISTS prymal_order_log (
 
-email STRING
-,frequency INT
-,recency INT
-, T INT
-,monetary_value DOUBLE
-, p_alive FLOAT
-,n_predicted_purchases_60 FLOAT
-, aov   DOUBLE
-,predicted_clv DOUBLE
+order_id STRING
+,email STRING
+,order_date DATE
+, product_rev DOUBLE
+, channel STRING
 
 
 )
@@ -18,5 +14,5 @@ partition_date DATE
 )
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY ',' 
-LOCATION 's3://prymal-analytics/shopify/cltv/rfm_inference/' 
+LOCATION 's3://prymal-analytics/order_log/' 
 TBLPROPERTIES ("skip.header.line.count"="1")
