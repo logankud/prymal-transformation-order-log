@@ -361,7 +361,7 @@ BUCKET = os.environ['S3_PRYMAL_ANALYTICS']
 logger.info(f'{len(orders_df)} rows in orders_df')
 
 # Get current data
-current_date = pd.to_datetime(pd.to_datetime('today') - timedelta(hours=5)).strftime('%Y-%m-%d')   # convert to EST
+current_date = pd.to_datetime(pd.to_datetime('today') - timedelta(days=1,hours=5)).strftime('%Y-%m-%d')   # convert to EST
 
 # Configure S3 Prefix
 S3_PREFIX_PATH = f"order_log/partition_date={current_date}/order_log_{current_date}.csv"
